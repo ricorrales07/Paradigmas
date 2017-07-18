@@ -1,35 +1,26 @@
 breed [healthy-cells healthy-cell]
 breed [infected-cells infected-cell]
-breed [fluorescent-cells fluorescent-cell]
 breed [dead-cells dead-cell]
 
-fluorescent-cells-own [
+infected-cells-own [
   fluorescence ;; level of fluorescence
-]
-
-patches-own [
-  infected-neighbors  ;; count of how many neighboring cells are infected
 ]
 
 to setup-blank
   clear-all
   set-default-shape turtles "circle"
   ask patches
-    [ sprout-healthy-cells 1
-      set infected-neighbors 0 ]
+    [ sprout-healthy-cells 1 ]
   setup-colors
   reset-ticks
 end
 
 to setup-colors
   ask healthy-cells [
-    set color blue
+    set color white
   ]
   ask infected-cells [
-    set color yellow
-  ]
-  ask fluorescent-cells [
-    set color green
+    set color [0 0 0]
   ]
   ask dead-cells [
     set color gray
@@ -37,6 +28,8 @@ to setup-colors
 end
 
 to setup-random
+  clear-all
+  set-default-shape turtles "circle"
   ask patches
     [ ifelse random-float 100.0 < initial-density
       [ sprout-infected-cells 1 ]
@@ -45,6 +38,42 @@ to setup-random
   reset-ticks  ;; set the tick counter back to 0
 end
 
+to-report decide-infection
+  report random-float 100.00 < infection-rate
+end
+
+to-report decide-glow
+  report random-float 100.00 < fluorescence-rate
+end
+
+to-report decide-die
+  report random-float 100.00 < death-rate
+end
+
+to go
+  ask infected-cells ;para cada célula infectada
+  [
+    ask turtles-on neighbors4
+    [
+      if (decide-infection) and (breed = healthy-cells);lanza un dado para ver si infecta a cada vecino
+      [ set breed infected-cells ] ;si sí, el vecino se infecta
+    ]
+
+    if decide-glow ;lanza un dado para ver si aumenta su brillo
+    [
+      set fluorescence fluorescence + 1 ;si sí, aumenta en 1
+      set color scale-color green fluorescence 0 100
+    ]
+
+    if decide-die
+    [
+      set breed dead-cells
+    ]
+  ]
+
+  setup-colors
+  tick
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 290
@@ -235,7 +264,7 @@ fluorescence-rate
 fluorescence-rate
 0
 100
-60.0
+80.25
 0.01
 1
 NIL
@@ -250,7 +279,7 @@ death-rate
 death-rate
 0
 100
-40.0
+20.38
 0.01
 1
 NIL
