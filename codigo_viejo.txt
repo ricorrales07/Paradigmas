@@ -1,4 +1,4 @@
-
+;;prueba
 
 ;; this procedure is called when a cell is about to become alive
 to birth  ;; patch procedure
