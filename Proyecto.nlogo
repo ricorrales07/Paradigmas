@@ -4,6 +4,7 @@ breed [dead-cells dead-cell]
 
 infected-cells-own [
   fluorescence ;; level of fluorescence
+  infected-time ;; time since initial infection
 ]
 
 to setup-blank
@@ -47,7 +48,7 @@ to-report decide-glow
 end
 
 to-report decide-die
-  report random-float 100.00 < death-rate
+  report random-float 100.00 * (1 - infected-time / (total-time * death-factor / 100)) < death-rate
 end
 
 to go
@@ -62,8 +63,10 @@ to go
     if decide-glow ;lanza un dado para ver si aumenta su brillo
     [
       set fluorescence fluorescence + 1 ;si sí, aumenta en 1
-      set color scale-color green fluorescence 0 500
+      set color scale-color green fluorescence 0 total-time
     ]
+
+    set infected-time infected-time + 1
 
     if decide-die
     [
@@ -73,6 +76,9 @@ to go
   ]
 
   tick
+
+  if ticks = total-time
+  [stop]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -279,8 +285,34 @@ death-rate
 death-rate
 0
 100
-0.01
+0.1
 0.001
+1
+NIL
+HORIZONTAL
+
+INPUTBOX
+816
+12
+971
+72
+total-time
+200.0
+1
+0
+Number
+
+SLIDER
+114
+498
+286
+531
+death-factor
+death-factor
+0
+100
+70.0
+1
 1
 NIL
 HORIZONTAL
