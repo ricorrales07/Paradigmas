@@ -80,6 +80,61 @@ to go
   if ticks = total-time
   [stop]
 end
+
+to erase  ;; patch procedure
+  ask turtles-here [ 
+    set breed dead-cells
+    set color red
+  ]
+  update
+  ask neighbors [ update ]
+end
+
+to draw-cells
+  let erasing? any? healthy-cells-on patch mouse-xcor mouse-ycor
+  while [mouse-down?]
+    [ ask patch mouse-xcor mouse-ycor
+      [ ifelse erasing?
+        [ erase ]
+        [ draw ] ]
+    display ]
+end
+
+to draw  ;; patch procedure
+  ask turtles
+  [ if not any? infected-cells-here and not any? dead-cells-here
+    [set breed infected-cells ]
+  ]
+  sprout-infected-cells 1
+  setup-colors
+  update
+  ask neighbors [ update ] 
+end
+
+to update  ;; patch procedure
+  ask infected-cells ;para cada célula infectada
+  [
+    ask turtles-on neighbors
+    [
+      if (decide-infection) and (breed = healthy-cells);lanza un dado para ver si infecta a cada vecino
+      [ set breed infected-cells ] ;si sí, el vecino se infecta
+    ]
+
+    if decide-glow ;lanza un dado para ver si aumenta su brillo
+    [
+      set fluorescence fluorescence + 1 ;si sí, aumenta en 1
+      set color scale-color green fluorescence 0 total-time
+    ]
+
+    set infected-time infected-time + 1
+
+    if decide-die
+    [
+      set breed dead-cells
+      set color red
+    ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 317
