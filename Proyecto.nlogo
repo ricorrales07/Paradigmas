@@ -17,13 +17,13 @@ end
 
 to setup-colors
   ask healthy-cells [
-    set color white
+    set color 87
   ]
   ask infected-cells [
     set color [0 0 0]
   ]
   ask dead-cells [
-    set color gray
+    set color red
   ]
 end
 
@@ -53,7 +53,7 @@ end
 to go
   ask infected-cells ;para cada célula infectada
   [
-    ask turtles-on neighbors4
+    ask turtles-on neighbors
     [
       if (decide-infection) and (breed = healthy-cells);lanza un dado para ver si infecta a cada vecino
       [ set breed infected-cells ] ;si sí, el vecino se infecta
@@ -62,45 +62,45 @@ to go
     if decide-glow ;lanza un dado para ver si aumenta su brillo
     [
       set fluorescence fluorescence + 1 ;si sí, aumenta en 1
-      set color scale-color green fluorescence 0 100
+      set color scale-color green fluorescence 0 500
     ]
 
     if decide-die
     [
       set breed dead-cells
+      set color red
     ]
   ]
 
-  setup-colors
   tick
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-290
+317
 10
-795
-516
+796
+490
 -1
 -1
-7.0
+2.3433
 1
 10
 1
 1
 1
 0
+0
+0
 1
-1
-1
--35
-35
--35
-35
+-100
+100
+-100
+100
 1
 1
 1
 ticks
-15.0
+5.0
 
 SLIDER
 125
@@ -111,8 +111,8 @@ initial-density
 initial-density
 0.0
 100.0
-7.1
-0.1
+0.01
+0.001
 1
 %
 HORIZONTAL
@@ -224,10 +224,10 @@ NIL
 1
 
 BUTTON
-24
-356
-87
-389
+124
+35
+187
+68
 clear
 clear-turtles
 NIL
@@ -249,7 +249,7 @@ infection-rate
 infection-rate
 0
 100
-10.0
+5.73
 0.01
 1
 NIL
@@ -264,7 +264,7 @@ fluorescence-rate
 fluorescence-rate
 0
 100
-80.25
+70.7
 0.01
 1
 NIL
@@ -279,8 +279,8 @@ death-rate
 death-rate
 0
 100
-20.38
 0.01
+0.001
 1
 NIL
 HORIZONTAL
