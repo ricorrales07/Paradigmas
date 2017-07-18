@@ -5,11 +5,12 @@ breed [dead-cells dead-cell]
 infected-cells-own [
   fluorescence ;; level of fluorescence
   infected-time ;; time since initial infection
+  probability-of-death
 ]
 
 to setup-blank
   clear-all
-  set-default-shape turtles "circle"
+  set-default-shape turtles "square"
   ask patches
     [ sprout-healthy-cells 1 ]
   setup-colors
@@ -30,7 +31,7 @@ end
 
 to setup-random
   clear-all
-  set-default-shape turtles "circle"
+  set-default-shape turtles "square"
   ask patches
     [ ifelse random-float 100.0 < initial-density
       [ sprout-infected-cells 1 ]
@@ -48,7 +49,8 @@ to-report decide-glow
 end
 
 to-report decide-die
-  report random-float 100.00 * (1 - infected-time / (total-time * death-factor / 100)) < death-rate
+  ;report random-float 100.00 * (1 - infected-time / (total-time * death-factor / 100)) < death-rate
+  report random-float 100.00 < (1 - (1 - death-rate / 100) ^ infected-time) * 100.00
 end
 
 to go
@@ -82,7 +84,7 @@ to go
 end
 
 to erase  ;; patch procedure
-  ask turtles-here [ 
+  ask turtles-here [
     set breed dead-cells
     set color red
   ]
@@ -101,14 +103,14 @@ to draw-cells
 end
 
 to draw  ;; patch procedure
-  ask turtles
+  ask turtles-here
   [ if not any? infected-cells-here and not any? dead-cells-here
     [set breed infected-cells ]
   ]
   sprout-infected-cells 1
   setup-colors
   update
-  ask neighbors [ update ] 
+  ask neighbors [ update ]
 end
 
 to update  ;; patch procedure
@@ -137,13 +139,13 @@ to update  ;; patch procedure
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-317
-10
-796
-490
+300
+34
+709
+444
 -1
 -1
-2.3433
+1.0
 1
 10
 1
@@ -153,10 +155,10 @@ GRAPHICS-WINDOW
 0
 0
 1
--100
-100
--100
-100
+-200
+200
+-200
+200
 1
 1
 1
@@ -165,9 +167,9 @@ ticks
 
 SLIDER
 125
-72
+74
 281
-105
+107
 initial-density
 initial-density
 0.0
@@ -285,10 +287,10 @@ NIL
 1
 
 BUTTON
-124
-35
-187
-68
+125
+37
+188
+70
 clear
 clear-turtles
 NIL
@@ -340,17 +342,17 @@ death-rate
 death-rate
 0
 100
-0.1
+0.01
 0.001
 1
 NIL
 HORIZONTAL
 
 INPUTBOX
-816
-12
-971
-72
+19
+356
+92
+416
 total-time
 200.0
 1
@@ -358,15 +360,15 @@ total-time
 Number
 
 SLIDER
-114
-498
-286
-531
+97
+620
+269
+653
 death-factor
 death-factor
 0
 100
-70.0
+51.0
 1
 1
 NIL
