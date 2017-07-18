@@ -85,15 +85,13 @@ end
 
 to erase  ;; patch procedure
   ask turtles-here [
-    set breed dead-cells
-    set color red
+    set breed healthy-cells
+    set color 87
   ]
-  update
-  ask neighbors [ update ]
 end
 
 to draw-cells
-  let erasing? any? healthy-cells-on patch mouse-xcor mouse-ycor
+  let erasing? (any? infected-cells-on patch mouse-xcor mouse-ycor) or (any? dead-cells-on patch mouse-xcor mouse-ycor)
   while [mouse-down?]
     [ ask patch mouse-xcor mouse-ycor
       [ ifelse erasing?
@@ -103,39 +101,17 @@ to draw-cells
 end
 
 to draw  ;; patch procedure
-  ask turtles-here
-  [ if not any? infected-cells-here and not any? dead-cells-here
-    [set breed infected-cells ]
-  ]
-  sprout-infected-cells 1
-  setup-colors
-  update
-  ask neighbors [ update ]
-end
-
-to update  ;; patch procedure
-  ask infected-cells ;para cada célula infectada
+  ifelse not any? turtles-here
   [
-    ask turtles-on neighbors
+    sprout-infected-cells 1
+  ]
+  [ask turtles-here
     [
-      if (decide-infection) and (breed = healthy-cells);lanza un dado para ver si infecta a cada vecino
-      [ set breed infected-cells ] ;si sí, el vecino se infecta
-    ]
-
-    if decide-glow ;lanza un dado para ver si aumenta su brillo
-    [
-      set fluorescence fluorescence + 1 ;si sí, aumenta en 1
-      set color scale-color green fluorescence 0 total-time
-    ]
-
-    set infected-time infected-time + 1
-
-    if decide-die
-    [
-      set breed dead-cells
-      set color red
+      set breed infected-cells
     ]
   ]
+  ask turtles-here
+  [set color [0 0 0]]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
