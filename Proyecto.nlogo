@@ -1,4 +1,3 @@
-breed [healthy-cells healthy-cell]
 breed [infected-cells infected-cell]
 breed [dead-cells dead-cell]
 
@@ -11,15 +10,13 @@ infected-cells-own [
 to setup-blank
   clear-all
   set-default-shape turtles "square"
-  ask patches
-    [ sprout-healthy-cells 1 ]
   setup-colors
   reset-ticks
 end
 
 to setup-colors
-  ask healthy-cells [
-    set color 87
+  ask patches [
+    set pcolor 87
   ]
   ask infected-cells [
     set color [0 0 0]
@@ -33,9 +30,8 @@ to setup-random
   clear-all
   set-default-shape turtles "square"
   ask patches
-    [ ifelse random-float 100.0 < initial-density
-      [ sprout-infected-cells 1 ]
-      [ sprout-healthy-cells 1 ] ]
+    [ if random-float 100.0 < initial-density
+      [ sprout-infected-cells 1 ] ]
   setup-colors
   reset-ticks  ;; set the tick counter back to 0
 end
@@ -56,10 +52,10 @@ end
 to go
   ask infected-cells ;para cada célula infectada
   [
-    ask turtles-on neighbors
+    ask neighbors
     [
-      if (decide-infection) and (breed = healthy-cells);lanza un dado para ver si infecta a cada vecino
-      [ set breed infected-cells ] ;si sí, el vecino se infecta
+      if (decide-infection) and (count turtles-here = 0);lanza un dado para ver si infecta a cada vecino
+      [ sprout-infected-cells 1 ] ;si sí, el vecino se infecta
     ]
 
     if decide-glow ;lanza un dado para ver si aumenta su brillo
@@ -84,10 +80,8 @@ to go
 end
 
 to erase  ;; patch procedure
-  ask turtles-here [
-    set breed healthy-cells
-    set color 87
-  ]
+  ask turtles-here [ die ]
+  set pcolor 87
 end
 
 to draw-cells
@@ -139,7 +133,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
-5.0
+2.0
 
 SLIDER
 125
@@ -150,7 +144,7 @@ initial-density
 initial-density
 0.0
 100.0
-0.01
+0.001
 0.001
 1
 %
@@ -288,7 +282,7 @@ infection-rate
 infection-rate
 0
 100
-5.73
+17.83
 0.01
 1
 NIL
@@ -303,7 +297,7 @@ fluorescence-rate
 fluorescence-rate
 0
 100
-70.7
+100.0
 0.01
 1
 NIL
