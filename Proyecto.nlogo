@@ -307,7 +307,7 @@ BUTTON
 188
 70
 clear
-clear-turtles
+clear-all
 NIL
 1
 T
@@ -369,7 +369,7 @@ INPUTBOX
 92
 416
 total-time
-200.0
+300.0
 1
 0
 Number
@@ -400,14 +400,14 @@ number of cells
 0.0
 225.0
 0.0
-90000.0
+20000.0
 true
 true
 "" ""
 PENS
-"infected cells" 1.0 0 -16777216 true "" "plot count infected-cells"
+"infected cells" 1.0 0 -16777216 true "" "plot (count infected-cells) + (count dead-cells)"
 "dead cells" 1.0 0 -2674135 true "" "plot count dead-cells"
-"fluorescent cells" 1.0 0 -10899396 true "" "plot count infected-cells with [fluorescence / 255 > fluorescence-detection-threashold]"
+"fluorescent cells" 1.0 0 -10899396 true "" "plot (count infected-cells with [fluorescence / 255 > fluorescence-detection-threashold]) + (count dead-cells with [fluorescence / 255 > fluorescence-detection-threashold])"
 
 SLIDER
 735
@@ -418,7 +418,7 @@ fluorescence-detection-threashold
 fluorescence-detection-threashold
 0
 1
-0.05
+0.15
 0.01
 1
 NIL
