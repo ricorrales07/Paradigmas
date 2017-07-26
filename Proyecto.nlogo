@@ -7,6 +7,10 @@ infected-cells-own [
   probability-of-death
 ]
 
+dead-cells-own [
+  fluorescence
+]
+
 to setup-blank
   clear-all
   set-default-shape turtles "square"
@@ -49,6 +53,42 @@ to-report decide-die
   report random-float 100.00 < (1 - (1 - death-rate / 100) ^ infected-time) * 100.00
 end
 
+to update-colors
+  ifelse (show-all-infected-cells)
+  [
+    ask infected-cells
+    [
+      set color scale-color green fluorescence 0 255
+    ]
+  ]
+  [
+    ask infected-cells
+    [
+      ifelse (fluorescence / 255 > fluorescence-detection-threashold)
+      [
+        set color scale-color green fluorescence 0 255
+      ]
+      [
+        set color 87
+      ]
+    ]
+  ]
+
+  ifelse (show-dead-cells)
+  [
+    ask dead-cells
+    [
+      set color red
+    ]
+  ]
+  [
+    ask dead-cells
+    [
+      set color scale-color green fluorescence 0 255
+    ]
+  ]
+end
+
 to go
   ask infected-cells ;para cada célula infectada
   [
@@ -61,17 +101,22 @@ to go
     if decide-glow ;lanza un dado para ver si aumenta su brillo
     [
       set fluorescence fluorescence + 1 ;si sí, aumenta en 1
-      set color scale-color green fluorescence 0 255
+      ;set color scale-color green fluorescence 0 255
     ]
 
     set infected-time infected-time + 1
 
+    let temp fluorescence
+
     if decide-die
     [
       set breed dead-cells
-      set color red
+      set fluorescence temp
+      ;set color red
     ]
   ]
+
+  update-colors
 
   tick
 
@@ -378,6 +423,45 @@ fluorescence-detection-threashold
 1
 NIL
 HORIZONTAL
+
+SWITCH
+737
+318
+881
+351
+show-dead-cells
+show-dead-cells
+1
+1
+-1000
+
+SWITCH
+738
+365
+916
+398
+show-all-infected-cells
+show-all-infected-cells
+1
+1
+-1000
+
+BUTTON
+928
+318
+1036
+351
+update-colors
+update-colors
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
