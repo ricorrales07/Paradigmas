@@ -61,7 +61,7 @@ to go
     if decide-glow ;lanza un dado para ver si aumenta su brillo
     [
       set fluorescence fluorescence + 1 ;si sí, aumenta en 1
-      set color scale-color green fluorescence 0 total-time
+      set color scale-color green fluorescence 0 255
     ]
 
     set infected-time infected-time + 1
@@ -207,7 +207,7 @@ MONITOR
 170
 319
 current density
-(count cells\n/ count patches) * 100
+((count infected-cells + count dead-cells)\n/ count patches) * 100
 2
 1
 11
@@ -234,7 +234,7 @@ TEXTBOX
 136
 288
 206
-When this button is down,\nyou can add or remove\ncells by holding down\nthe mouse button\nand \"drawing\".
+When this button is down,\nyou can add or remove infected\ncells by holding down\nthe mouse button\nand \"drawing\".
 11
 0.0
 0
@@ -285,29 +285,29 @@ infection-rate
 17.83
 0.01
 1
-NIL
+%
 HORIZONTAL
 
 SLIDER
 111
 398
-283
+293
 431
 fluorescence-rate
 fluorescence-rate
 0
 100
-100.0
+80.89
 0.01
 1
-NIL
+%
 HORIZONTAL
 
 SLIDER
-111
-449
-283
-482
+112
+441
+284
+474
 death-rate
 death-rate
 0
@@ -315,7 +315,7 @@ death-rate
 0.01
 0.001
 1
-NIL
+%
 HORIZONTAL
 
 INPUTBOX
@@ -340,6 +340,41 @@ death-factor
 100
 51.0
 1
+1
+NIL
+HORIZONTAL
+
+PLOT
+732
+34
+1080
+257
+Plot
+time
+number of cells
+0.0
+225.0
+0.0
+90000.0
+true
+true
+"" ""
+PENS
+"infected cells" 1.0 0 -16777216 true "" "plot count infected-cells"
+"dead cells" 1.0 0 -2674135 true "" "plot count dead-cells"
+"fluorescent cells" 1.0 0 -10899396 true "" "plot count infected-cells with [fluorescence / 255 > fluorescence-detection-threashold]"
+
+SLIDER
+735
+269
+975
+302
+fluorescence-detection-threashold
+fluorescence-detection-threashold
+0
+1
+0.05
+0.01
 1
 NIL
 HORIZONTAL
