@@ -327,7 +327,7 @@ infection-rate
 infection-rate
 0
 100
-17.83
+20.0
 0.01
 1
 %
@@ -342,7 +342,7 @@ fluorescence-rate
 fluorescence-rate
 0
 100
-80.89
+80.0
 0.01
 1
 %
@@ -369,16 +369,16 @@ INPUTBOX
 92
 416
 total-time
-300.0
+200.0
 1
 0
 Number
 
 SLIDER
-97
-620
-269
-653
+101
+683
+273
+716
 death-factor
 death-factor
 0
@@ -392,15 +392,15 @@ HORIZONTAL
 PLOT
 732
 34
-1080
+1201
 257
 Plot
 time
 number of cells
 0.0
-225.0
+325.0
 0.0
-20000.0
+100000.0
 true
 true
 "" ""
@@ -431,7 +431,7 @@ SWITCH
 351
 show-dead-cells
 show-dead-cells
-1
+0
 1
 -1000
 
@@ -442,7 +442,7 @@ SWITCH
 398
 show-all-infected-cells
 show-all-infected-cells
-1
+0
 1
 -1000
 
